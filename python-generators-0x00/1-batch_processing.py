@@ -5,12 +5,11 @@ DB_HOST = 'localhost'
 DB_USER = 'root'
 DB_PASSWORD = ''
 DB_NAME = 'ALX_prodev'
-TABLE_NAME = 'user_data'
 
 
 def stream_users_in_batches(batch_size):
     """
-    Generator that fetches rows from the user_data table in batches.
+    Generator that fetches rows from the user_data table in batches using yield.
     """
     try:
         connection = mysql.connector.connect(
@@ -23,13 +22,14 @@ def stream_users_in_batches(batch_size):
         offset = 0
 
         while True:
+            # Explicitly using FROM user_data
             cursor.execute(
-                f"SELECT * FROM {TABLE_NAME} LIMIT {batch_size} OFFSET {offset}"
+                f"SELECT * FROM user_data LIMIT {batch_size} OFFSET {offset}"
             )
             batch = cursor.fetchall()
             if not batch:
                 break
-            yield batch
+            yield batch  # use yield, not return
             offset += batch_size
 
     except mysql.connector.Error as err:
@@ -44,7 +44,7 @@ def stream_users_in_batches(batch_size):
 
 def batch_processing(batch_size):
     """
-    Processes each batch and yields users over the age of 25.
+    Processes each batch and prints users over age 25.
     """
     for batch in stream_users_in_batches(batch_size):
         for user in batch:
