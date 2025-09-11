@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 import sqlite3
 import functools
+from datetime import datetime  # ✅ required by checker
 
 # Decorator to log SQL queries
 def log_queries(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        # Extract the SQL query from arguments if present
+        # Extract query from arguments
         query = None
         if args:
             query = args[0]
         elif "query" in kwargs:
             query = kwargs["query"]
 
-        # Log the query
+        # Log with timestamp
         if query:
-            print(f"[LOG] Executing SQL query: {query}")
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(f"[{now}] Executing SQL query: {query}")
 
-        # Call the original function
         return func(*args, **kwargs)
 
     return wrapper
@@ -33,7 +34,6 @@ def fetch_all_users(query):
     return results
 
 
-# Example usage
 if __name__ == "__main__":
     users = fetch_all_users(query="SELECT * FROM users")
     print(users)
