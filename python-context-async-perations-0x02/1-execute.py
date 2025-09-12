@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sqlite3
 
-
 class ExecuteQuery:
     """Context manager to execute a query and return results automatically."""
 
