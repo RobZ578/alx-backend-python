@@ -14,6 +14,7 @@ def with_db_connection(func):
     Returns:
         The wrapper function that manages database connections
     """
+    
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         # Open database connection
